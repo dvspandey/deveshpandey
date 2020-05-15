@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+void first_half(int n,int* arr,int low,int high,int arr_size);
+void second_half(int n,int* arr,int low,int high,int arr_size);
+int main() 
+{
+
+    int n;
+    scanf("%d", &n);
+  	// Complete the code to print the pattern.
+    if(1<=n && n<=1000)
+    {
+         int *arr = (int*)calloc(n+(n-1),sizeof(int));
+         int arr_size = n+(n-1);
+
+         first_half(n,arr,0,(arr_size-1),arr_size);
+    }
+   
+
+    return 0;
+}
+
+void first_half(int n,int* arr,int low,int high,int arr_size)
+{
+
+    for(int i=low;i<=high;i++)
+    {
+        *(arr+i) = n;
+    }
+    for(int i=0;i<arr_size;i++)
+    {
+        printf("%d ",*(arr+i));
+    }
+    printf("\n");
+
+    low++;
+    high--;
+    if(low <= high)
+    {
+        first_half(n-1,arr,low,high,arr_size);
+    }
+    else
+    {
+        low--;
+        high++;
+        second_half(n+1,arr,low,high,arr_size);
+    }
+
+}
+
+void second_half(int n,int* arr,int low,int high,int arr_size)
+{
+    low--;
+    high++;
+
+    for(int i=low;i<=high;i++)
+    {
+        *(arr+i) = n;
+    }
+    for(int i=0;i<arr_size;i++)
+    {
+        printf("%d ",*(arr+i));
+    }
+    printf("\n");
+
+    if(0<low)
+    {
+        second_half(n+1,arr,low,high,arr_size);
+    }  
+}
