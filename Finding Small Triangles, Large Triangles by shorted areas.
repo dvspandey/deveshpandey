@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+struct triangle
+{
+	int a;
+	int b;
+	int c;
+};
+
+typedef struct triangle triangle;
+
+void swap(int* a,int* b)
+{   
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+
+}
+void shorting(int* area,int n)
+{
+    for(int i=0;i<(n-1);i++) //sorting an array
+    {
+        for(int j=(i+1);j<n;j++)
+        {
+            if(area[i]>area[j])
+            {
+                swap(&area[i],&area[j]);
+            }
+        }
+    }
+/*
+    printf("\n area = ");
+    for(int i=0; i<n; i++)
+    {
+        printf("%d  ",area[i]);
+    }
+*/
+}
+
+int Constraints(triangle* tr, int n) 
+{
+    int flag = 1;
+    if(1<=n && n<=100) // 1rd Constraints satisfy
+    {
+        for(int i=0; i<n; i++)
+        {
+            if((1<=tr[i].a && tr[i].a<=70) && (1<=tr[i].b && tr[i].b<=70) && (1<=tr[i].c && tr[i].c<=70)) // 2rd Constraints satisfy
+            {
+                if((tr[i].a+tr[i].b > tr[i].c) && (tr[i].b+tr[i].c > tr[i].a) && (tr[i].c+tr[i].a > tr[i].b)) // 3rd Constraint  satisfy
+                {
+                    if(flag == 1)
+                    {
+                        flag =1; // if satisfy some cond. then also wait for all conditions satisfication.
+                    }
+                    
+                }
+                else
+                {
+                    flag = 0; //any one cond. false then immidiatly return 0;
+                }
+                
+            }
+            else
+            {
+                flag =  0;
+            }
+        }
+    }
+    else
+    {
+        flag = 0;
+    }
+    return flag;
+}
+
+void sort_by_area(triangle* tr, int n) 
+{
+    /**
+    * Sort an array a of the length n
+    */
+    if( Constraints( tr, n) == 1) // for Constraints
+    {
+
+        int *area,p;
+        area = (int*)calloc(n,sizeof(int));
+
+        for(int i=0; i<n; i++)
+        {
+            p = (tr[i].a+tr[i].b+tr[i].c)/2;
+            area[i] = sqrt(p*(p-tr[i].a)*(p-tr[i].b)*(p-tr[i].c));
+        }
+/*    
+    printf("\n dimensions = ");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d %d %d\n", tr[i].a, tr[i].b, tr[i].c);
+    }
+ */  
+        shorting(area,n);
+    
+        for(int i=0; i<n; i++) // arrange a,b,c according to area wise
+        {
+        
+            for(int j=i;j<n;j++)
+            {
+                p = (tr[j].a+tr[j].b+tr[j].c)/2;
+                if(area[i] == sqrt(p*(p-tr[j].a)*(p-tr[j].b)*(p-tr[j].c)))
+                {
+                   swap(&tr[i].a,&tr[j].a);
+                   swap(&tr[i].b,&tr[j].b);
+                   swap(&tr[i].c,&tr[j].c);
+                   break;
+                }
+            }
+
+        
+        }
+/*
+    printf("\n dimensions = ");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d %d %d\n", tr[i].a, tr[i].b, tr[i].c);
+    }
+ */   
+
+    }
+    
+
+}
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	triangle *tr = malloc(n * sizeof(triangle));
+	for (int i = 0; i < n; i++) {
+		scanf("%d%d%d", &tr[i].a, &tr[i].b, &tr[i].c);
+	}
+	sort_by_area(tr, n);
+	for (int i = 0; i < n; i++) {
+		printf("%d %d %d\n", tr[i].a, tr[i].b, tr[i].c);
+	}
+	return 0;
+}
