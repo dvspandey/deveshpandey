@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+//Complete the following function.
+int constraint(int* marks, int number_of_students, char gender)
+{
+    int flag = 0;
+
+    if(1<=number_of_students && number_of_students<=pow(10,3)) // Constraints
+    {
+        for(int i=0;i<number_of_students;i++)
+        {
+            //printf("%d, ",*(marks+i));
+            if(1<=*(marks+i) && *(marks+i)<=pow(10,3))
+            {
+                if(gender == 'g' ||gender == 'b')
+                {
+                    flag = 1;
+                }
+                else
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+            else
+            {
+                flag = 0;
+                break;
+            }
+        }
+
+    }
+    return flag;
+}
+int array_sum(int* arr,int size)
+{
+    int sum = 0;
+    for(int i=0;i<size;i++)
+    {
+        sum = sum + *(arr+i);
+        //printf("%d, ",*(arr+i));
+    }
+    //printf("\n sum =  %d ",sum);
+    return sum;
+}
+
+int marks_summation(int* marks, int number_of_students, char gender)
+{ 
+    int sum = 0;
+    //Write your code here.
+    if(constraint(marks,number_of_students,gender)==1)
+    {
+        float half = number_of_students/2;
+        if(number_of_students%2 != 0)
+        {
+            half = half + 0.5;
+        }
+        // printf("half = %f\n, ",half);
+        int even_half = (int)round(half);
+        int odd_half = half;
+   
+        // printf("\neven_half = %d, ",even_half);
+        //  printf("odd_half = %d\n, ",odd_half);
+   
+        int *even_items = (int*)malloc(even_half*sizeof(int));//if number_of_students is odd then always even items is more than odd item by 1 extra item (ex: index --> 0,1,2,3,4  [0,2,4 are even]&[1,3 are odd]).
+        int *odd_items = (int*)malloc(odd_half*sizeof(int)); 
+
+        //printf("\neven ele = ");
+        for(int i=0,j=0;i<even_half;i++) //boys
+        {
+            *(even_items+i) = *(marks+j); 
+            //printf("%d, ",*(marks+j));
+            j = j+2;
+        }
+        //printf("\nodd ele = ");
+        for(int i=0,j=1;i<odd_half;i++) //girls
+        {
+            *(odd_items+i) = *(marks+j);
+         //printf("%d, ",*(marks+j)); 
+            j = j+2;
+        }
+
+        if(gender == 'b')
+        {
+            sum = array_sum(even_items,even_half);
+        }
+        else if(gender == 'g')
+        {
+            sum = array_sum(odd_items,odd_half);
+        }
+
+/*      for(int i=0;i<number_of_students;i++)
+        {
+            printf("%d, ",*(marks+i));
+        }
+*/
+
+    } 
+    
+    return sum;
+}
+
+int main() {
+    int number_of_students;
+    char gender;
+    int sum;
+  
+    scanf("%d", &number_of_students);
+    int *marks = (int *) malloc(number_of_students * sizeof (int));
+ 
+    for (int student = 0; student < number_of_students; student++) {
+        scanf("%d", (marks + student));
+    }
+    
+    scanf(" %c", &gender);
+    sum = marks_summation(marks, number_of_students, gender);
+    printf("%d", sum);
+    free(marks);
+ 
+    return 0;
+}
